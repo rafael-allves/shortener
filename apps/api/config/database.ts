@@ -7,7 +7,6 @@
  */
 
 import { MongoClient, Db, Collection, Document } from "mongodb";
-import logger from "../utils/logger";
 
 let client: MongoClient;
 let database: Db;
