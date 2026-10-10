@@ -21,5 +21,3 @@ export type ErrorResponse = {
     };
     timestamp: string;
 };
-
-export type ApiResponse<T> = SuccessResponse<T> | ErrorResponse;

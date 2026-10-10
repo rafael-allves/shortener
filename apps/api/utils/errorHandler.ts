@@ -5,9 +5,9 @@
  * It includes middleware for catching and formatting errors in a consistent way.
  */
 
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { MongoError } from "mongodb";
-import { SuccessResponse, ErrorResponse } from "../types";
+import type { SuccessResponse, ErrorResponse } from "../types/index.ts";
 
 /**
  * Custom ValidationError class for field validation errors

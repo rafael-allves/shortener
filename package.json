@@ -1,0 +1,19 @@
+{
+  "name": "url-shortener",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n api,web \"npm run dev -w @shortener/api\" \"npm run dev -w @shortener/web\"",
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm test --workspace=@shortener/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

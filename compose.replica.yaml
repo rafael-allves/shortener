@@ -1,0 +1,27 @@
+name: shortener-replica-lab
+services:
+  mongo1:
+    image: mongo:8.0
+    command: [mongod, --replSet, rsLab, --bind_ip_all]
+    volumes: [lab_mongo1:/data/db]
+  mongo2:
+    image: mongo:8.0
+    command: [mongod, --replSet, rsLab, --bind_ip_all]
+    volumes: [lab_mongo2:/data/db]
+  mongo3:
+    image: mongo:8.0
+    command: [mongod, --replSet, rsLab, --bind_ip_all]
+    volumes: [lab_mongo3:/data/db]
+  simulation:
+    image: url-shortener-api
+    working_dir: /app/apps/api
+    volumes:
+      - ./apps/api:/app/apps/api:ro
+    command: [node, scripts/replica-simulation.ts]
+    environment:
+      MONGODB_URI: mongodb://mongo1:27017,mongo2:27017,mongo3:27017/replica_lab?replicaSet=rsLab&w=majority&retryWrites=true
+    depends_on: [mongo1, mongo2, mongo3]
+volumes:
+  lab_mongo1:
+  lab_mongo2:
+  lab_mongo3:

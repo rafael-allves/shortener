@@ -1,9 +1,13 @@
+import urlRoutes from './features/url/routes.ts';
+import { errorHandler } from './utils/errorHandler.ts';
+import { connectToDatabase, closeDatabaseConnection } from './config/database.ts';
 import express, { type Express, type Request, type Response } from 'express';
 import { redis } from './config/redis.ts';
 
 const app: Express = express();
 const port = Number(process.env.PORT ?? 3000);
 
+await connectToDatabase();
 await redis.connect();
 
 app.use(express.json());
@@ -16,7 +20,8 @@ app.get('/api/health', (_: Request, res: Response) => {
     res.json({ status: 'ok' });
 });
 
-// Register your URL-shortener routes here.
+app.use('/api/links', urlRoutes);
+app.use(errorHandler);
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`API listening on port ${port}`);
@@ -27,16 +32,16 @@ app.listen(port, '0.0.0.0', () => {
  * Graceful Shutdown Handler
  * Ensures the application shuts down cleanly when terminated
  */
-process.on("SIGINT", () => {
+process.on("SIGINT", async () => {
     console.log("Received SIGINT. Shutting down gracefully...");
-    closeDatabaseConnection();
-    redis.close();
-    console.log.exit(0);
+    await closeDatabaseConnection();
+    await redis.close();
+    process.exit(0);
 });
 
-process.on("SIGTERM", () => {
+process.on("SIGTERM", async () => {
     console.log("Received SIGTERM. Shutting down gracefully...");
-    closeDatabaseConnection();
-    redis.close();
+    await closeDatabaseConnection();
+    await redis.close();
     process.exit(0);
 });

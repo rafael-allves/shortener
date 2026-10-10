@@ -2,6 +2,7 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/ioredis": "^4.28.10",
+    "@types/mongodb": "^4.0.6",
     "@types/node": "^26.6.4",
     "@types/redis": "^4.0.10",
     "typescript": "^7.0.2"
@@ -9,6 +10,7 @@
   "dependencies": {
     "express": "^5.2.1",
     "ioredis": "^6.0.0",
+    "mongodb": "^7.7.0",
     "redis": "^6.3.0"
   },
   "name": "@shortener/api",
@@ -19,6 +21,8 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "start": "node --env-file-if-exists=../../.env dist/server.js",
-    "test": "node --test test/*.test.ts"
+    "test": "node --test test/*.test.ts",
+    "migrate": "node --env-file-if-exists=../../.env migrations/run.ts",
+    "migrate:production": "node dist/migrations/run.js"
   }
 }
